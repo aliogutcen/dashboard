@@ -1,0 +1,169 @@
+@use 'sass:map';
+@use 'sass:list';
+@use 'variables';
+@use 'functions';
+
+/// Flex container oluşturur
+/// @param {String} $direction [row] - Flex yönü
+/// @param {String} $justify [flex-start] - Yatay hizalama
+/// @param {String} $align [stretch] - Dikey hizalama
+/// @param {String} $wrap [nowrap] - Sarma davranışı
+@mixin flex($direction: row, $justify: flex-start, $align: stretch, $wrap: nowrap) {
+  display: flex;
+  flex-direction: $direction;
+  justify-content: $justify;
+  align-items: $align;
+  flex-wrap: $wrap;
+}
+
+/// Grid container oluşturur
+/// @param {Number} $columns [12] - Grid sütun sayısı
+/// @param {String} $gap [1rem] - Grid boşluk değeri
+@mixin grid($columns: 12, $gap: 1rem) {
+  display: grid;
+  grid-template-columns: repeat($columns, minmax(0, 1fr));
+  gap: $gap;
+}
+
+/// Container oluşturur
+/// @param {String} $max-width [1200px] - Maksimum genişlik
+/// @param {String} $padding [1rem] - Yatay padding
+@mixin container($max-width: 1200px, $padding: 1rem) {
+  width: 100%;
+  max-width: $max-width;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: $padding;
+  padding-right: $padding;
+}
+
+/// Geçiş efekti ekler
+/// @param {String} $property [all] - Geçiş özelliği
+/// @param {String} $duration [base] - Geçiş süresi
+/// @param {String} $timing [in-out] - Geçiş zamanlaması
+@mixin transition($property: all, $duration: base, $timing: 'in-out') {
+  transition-property: $property;
+  transition-duration: functions.get-transition-duration($duration);
+  transition-timing-function: functions.get-easing($timing);
+}
+
+/// Font stilini ayarlar
+/// @param {String} $size - Font boyutu
+/// @param {String} $weight [normal] - Font ağırlığı
+/// @param {Number} $line-height [1.5] - Satır yüksekliği
+@mixin font($size, $weight: normal, $line-height: 1.5) {
+  font-size: functions.get-font-size($size);
+  font-weight: functions.get-font-weight($weight);
+  line-height: $line-height;
+}
+
+/// Form kontrolü stilini ayarlar
+@mixin form-control {
+  display: block;
+  width: 100%;
+  padding: functions.get-spacing('2') functions.get-spacing('3');
+  font-size: functions.get-font-size('base');
+  line-height: 1.5;
+  color: functions.get-color('neutral', 'gray-9');
+  background-color: functions.get-color('neutral', 'white');
+  border: 1px solid functions.get-color('neutral', 'gray-4');
+  border-radius: functions.get-border-radius('base');
+  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+
+  &:focus {
+    border-color: functions.get-color('primary', 'light');
+    outline: 0;
+    box-shadow: 0 0 0 0.2rem rgba(functions.get-color('primary'), 0.25);
+  }
+
+  &::placeholder {
+    color: functions.get-color('neutral', 'gray-6');
+    opacity: 1;
+  }
+
+  &:disabled,
+  &[readonly] {
+    background-color: functions.get-color('neutral', 'gray-2');
+    opacity: 1;
+  }
+}
+
+/// Buton temel stilini ayarlar
+@mixin button-base {
+  display: inline-block;
+  font-weight: functions.get-font-weight('medium');
+  text-align: center;
+  vertical-align: middle;
+  cursor: pointer;
+  user-select: none;
+  padding: functions.get-spacing('2') functions.get-spacing('4');
+  font-size: functions.get-font-size('base');
+  line-height: 1.5;
+  border-radius: functions.get-border-radius('base');
+  transition: color 0.15s ease-in-out,
+              background-color 0.15s ease-in-out,
+              border-color 0.15s ease-in-out,
+              box-shadow 0.15s ease-in-out;
+
+  &:focus {
+    outline: 0;
+  }
+
+  &:disabled {
+    opacity: 0.65;
+    pointer-events: none;
+  }
+}
+
+/// Buton varyantı stilini ayarlar
+/// @param {String} $variant [primary] - Buton varyantı
+@mixin button-variant($variant: primary) {
+  $color: functions.get-color($variant);
+  $color-light: functions.get-color($variant, 'light');
+  $color-dark: functions.get-color($variant, 'dark');
+
+  color: if($variant == 'light', functions.get-color('neutral', 'gray-9'), functions.get-color('neutral', 'white'));
+  background-color: $color;
+  border: 1px solid $color;
+
+  &:hover {
+    color: if($variant == 'light', functions.get-color('neutral', 'gray-9'), functions.get-color('neutral', 'white'));
+    background-color: $color-dark;
+    border-color: $color-dark;
+  }
+
+  &:focus {
+    box-shadow: 0 0 0 0.2rem rgba($color, 0.5);
+  }
+
+  &:active {
+    background-color: $color-dark;
+    border-color: $color-dark;
+    box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+  }
+}
+
+/// Media query - minimum genişlik
+/// @param {String} $breakpoint - Breakpoint adı
+@mixin media-up($breakpoint) {
+  @media (min-width: functions.get-breakpoint($breakpoint)) {
+    @content;
+  }
+}
+
+/// Media query - maksimum genişlik
+/// @param {String} $breakpoint - Breakpoint adı
+@mixin media-down($breakpoint) {
+  @media (max-width: functions.get-breakpoint($breakpoint)) {
+    @content;
+  }
+}
+
+/// Media query - minimum ve maksimum genişlik arası
+/// @param {String} $min-breakpoint - Minimum breakpoint adı
+/// @param {String} $max-breakpoint - Maksimum breakpoint adı
+@mixin media-between($min-breakpoint, $max-breakpoint) {
+  @media (min-width: functions.get-breakpoint($min-breakpoint)) and (max-width: functions.get-breakpoint($max-breakpoint)) {
+    @content;
+  }
+}

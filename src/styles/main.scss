@@ -1,0 +1,160 @@
+@use 'abstracts' as *;
+@use 'pages/auth';
+
+// Reset
+*, *::before, *::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+// Base HTML elements
+:root {
+  --font-poppins: 'Poppins', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+}
+
+html {
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  font-family: var(--font-poppins);
+  line-height: 1.5;
+  color: get-color('neutral', 'gray-9');
+  background-color: get-color('neutral', 'white');
+}
+
+// Typography
+h1, h2, h3, h4, h5, h6 {
+  margin-bottom: get-spacing('4');
+  line-height: 1.2;
+  font-family: var(--font-poppins);
+}
+
+h1 { @include font('5xl', 'bold'); }
+h2 { @include font('4xl', 'bold'); }
+h3 { @include font('3xl', 'bold'); }
+h4 { @include font('2xl', 'bold'); }
+h5 { @include font('xl', 'bold'); }
+h6 { @include font('lg', 'bold'); }
+
+p {
+  margin-bottom: get-spacing('4');
+}
+
+a {
+  color: get-color('primary');
+  text-decoration: none;
+  @include transition(color);
+
+  &:hover {
+    color: get-color('primary', 'dark');
+  }
+}
+
+// Form elements
+input, button, textarea, select {
+  font-family: var(--font-poppins);
+}
+
+// Utility Classes
+// Container
+.container {
+  @include container;
+}
+
+// Margin
+@each $size, $value in $spacing {
+  .m-#{$size} { margin: $value; }
+  .mt-#{$size} { margin-top: $value; }
+  .mr-#{$size} { margin-right: $value; }
+  .mb-#{$size} { margin-bottom: $value; }
+  .ml-#{$size} { margin-left: $value; }
+  .mx-#{$size} {
+    margin-left: $value;
+    margin-right: $value;
+  }
+  .my-#{$size} {
+    margin-top: $value;
+    margin-bottom: $value;
+  }
+}
+
+// Padding
+@each $size, $value in $spacing {
+  .p-#{$size} { padding: $value; }
+  .pt-#{$size} { padding-top: $value; }
+  .pr-#{$size} { padding-right: $value; }
+  .pb-#{$size} { padding-bottom: $value; }
+  .pl-#{$size} { padding-left: $value; }
+  .px-#{$size} {
+    padding-left: $value;
+    padding-right: $value;
+  }
+  .py-#{$size} {
+    padding-top: $value;
+    padding-bottom: $value;
+  }
+}
+
+// Flex
+.flex { display: flex; }
+.flex-row { flex-direction: row; }
+.flex-col { flex-direction: column; }
+.flex-wrap { flex-wrap: wrap; }
+.items-start { align-items: flex-start; }
+.items-center { align-items: center; }
+.items-end { align-items: flex-end; }
+.justify-start { justify-content: flex-start; }
+.justify-center { justify-content: center; }
+.justify-end { justify-content: flex-end; }
+.justify-between { justify-content: space-between; }
+
+// Grid
+.grid { display: grid; }
+@for $i from 1 through 12 {
+  .grid-cols-#{$i} {
+    grid-template-columns: repeat($i, minmax(0, 1fr));
+  }
+}
+
+// Visibility
+.hidden { display: none; }
+.block { display: block; }
+.inline-block { display: inline-block; }
+.inline { display: inline; }
+
+// Responsive Helpers
+@each $breakpoint, $value in $breakpoints {
+  @include media-up($breakpoint) {
+    .show-#{$breakpoint} { display: block; }
+    .hide-#{$breakpoint} { display: none; }
+  }
+}
+
+// Theme Colors
+@each $color, $shades in $colors {
+  @each $shade, $value in $shades {
+    .text-#{$color}-#{$shade} { color: $value; }
+    .bg-#{$color}-#{$shade} { background-color: $value; }
+    .border-#{$color}-#{$shade} { border-color: $value; }
+  }
+}
+
+// Form Elements
+.form-control {
+  @include form-control;
+}
+
+// Buttons
+.btn {
+  @include button-base;
+}
+
+@each $variant in ('primary', 'success', 'warning', 'error') {
+  .btn-#{$variant} {
+    @include button-variant($variant);
+  }
+}

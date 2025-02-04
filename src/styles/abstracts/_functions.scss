@@ -1,0 +1,121 @@
+@use 'sass:map';
+@use 'sass:math';
+@use 'sass:color';
+@use 'variables';
+
+/// Renk değeri döndürür
+/// @param {String} $color - Renk adı
+/// @param {String} $shade [base] - Renk tonu
+/// @return {Color} Renk değeri
+@function get-color($color, $shade: 'base') {
+  @if not map.has-key(variables.$colors, $color) {
+    @error 'Geçersiz renk: #{$color}. Geçerli renkler: #{map.keys(variables.$colors)}';
+  }
+  
+  $color-map: map.get(variables.$colors, $color);
+  
+  @if not map.has-key($color-map, $shade) {
+    @error 'Geçersiz ton: #{$shade}. Geçerli tonlar: #{map.keys($color-map)}';
+  }
+  
+  @return map.get($color-map, $shade);
+}
+
+/// Boşluk değeri döndürür
+/// @param {String} $size - Boşluk boyutu
+/// @return {Length} Boşluk değeri
+@function get-spacing($size) {
+  @if not map.has-key(variables.$spacing, $size) {
+    @error 'Geçersiz boşluk: #{$size}. Geçerli boşluklar: #{map.keys(variables.$spacing)}';
+  }
+  
+  @return map.get(variables.$spacing, $size);
+}
+
+/// Font boyutu döndürür
+/// @param {String} $size - Font boyutu
+/// @return {Length} Font boyutu değeri
+@function get-font-size($size) {
+  @if not map.has-key(variables.$font-sizes, $size) {
+    @error 'Geçersiz font boyutu: #{$size}. Geçerli boyutlar: #{map.keys(variables.$font-sizes)}';
+  }
+  
+  @return map.get(variables.$font-sizes, $size);
+}
+
+/// Font ağırlığı döndürür
+/// @param {String} $weight - Font ağırlığı
+/// @return {Number} Font ağırlığı değeri
+@function get-font-weight($weight) {
+  @if not map.has-key(variables.$font-weights, $weight) {
+    @error 'Geçersiz font ağırlığı: #{$weight}. Geçerli ağırlıklar: #{map.keys(variables.$font-weights)}';
+  }
+  
+  @return map.get(variables.$font-weights, $weight);
+}
+
+/// Breakpoint değeri döndürür
+/// @param {String} $breakpoint - Breakpoint adı
+/// @return {Length} Breakpoint değeri
+@function get-breakpoint($breakpoint) {
+  @if not map.has-key(variables.$breakpoints, $breakpoint) {
+    @error 'Geçersiz breakpoint: #{$breakpoint}. Geçerli breakpointler: #{map.keys(variables.$breakpoints)}';
+  }
+  
+  @return map.get(variables.$breakpoints, $breakpoint);
+}
+
+/// Z-index değeri döndürür
+/// @param {String} $layer - Katman adı
+/// @return {Number} Z-index değeri
+@function get-z-index($layer) {
+  @if not map.has-key(variables.$z-layers, $layer) {
+    @error 'Geçersiz z-index katmanı: #{$layer}. Geçerli katmanlar: #{map.keys(variables.$z-layers)}';
+  }
+  
+  @return map.get(variables.$z-layers, $layer);
+}
+
+/// Border radius değeri döndürür
+/// @param {String} $size - Border radius boyutu
+/// @return {Length} Border radius değeri
+@function get-border-radius($size) {
+  @if not map.has-key(variables.$border-radius, $size) {
+    @error 'Geçersiz border radius: #{$size}. Geçerli boyutlar: #{map.keys(variables.$border-radius)}';
+  }
+  
+  @return map.get(variables.$border-radius, $size);
+}
+
+/// Gölge değeri döndürür
+/// @param {String} $size - Gölge boyutu
+/// @return {String} Gölge değeri
+@function get-shadow($size) {
+  @if not map.has-key(variables.$shadows, $size) {
+    @error 'Geçersiz gölge: #{$size}. Geçerli boyutlar: #{map.keys(variables.$shadows)}';
+  }
+  
+  @return map.get(variables.$shadows, $size);
+}
+
+/// Geçiş süresi döndürür
+/// @param {String} $duration - Geçiş süresi
+/// @return {Time} Geçiş süresi değeri
+@function get-transition-duration($duration) {
+  @if not map.has-key(variables.$transitions, $duration) {
+    @error 'Geçersiz geçiş süresi: #{$duration}. Geçerli süreler: #{map.keys(variables.$transitions)}';
+  }
+  
+  @return map.get(variables.$transitions, $duration);
+}
+
+/// Geçiş zamanlaması döndürür
+/// @param {String} $easing - Geçiş zamanlaması
+/// @return {String} Geçiş zamanlaması değeri
+@function get-easing($easing) {
+  @if not map.has-key(variables.$easings, $easing) {
+    @error 'Geçersiz geçiş zamanlaması: #{$easing}. Geçerli zamanlamalar: #{map.keys(variables.$easings)}';
+  }
+  
+  @return map.get(variables.$easings, $easing);
+}
