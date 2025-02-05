@@ -1,5 +1,9 @@
 @use 'abstracts' as *;
 @use 'pages/auth';
+@use 'components/sidebar';
+@use 'components/dashboard';
+@use 'components/header';
+@use 'components/main';
 
 // Reset
 *, *::before, *::after {

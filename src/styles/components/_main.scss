@@ -1,0 +1,8 @@
+@use '../abstracts/' as *;
+
+.main-container {
+    flex-grow: 1;
+    padding: get-spacing('4');
+    margin-top: 4rem; // Header yüksekliği kadar boşluk bırak
+    overflow-y: auto;
+}
