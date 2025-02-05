@@ -1,0 +1,20 @@
+@use '../abstracts/' as *;
+
+.header-container {
+    @include flex;
+    height: 4rem;
+    background-color: get-color('neutral', 'gray-1');
+    color: get-color('neutral', 'black');
+    align-items: center;
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+    position: fixed;
+    width: calc(100% - 16rem); // Sidebar kapladığı alanı düş
+    top: 0;
+    left: 16rem;
+
+    h1 {
+        font-size: x-large;
+        font-weight: bold;
+    }
+}
