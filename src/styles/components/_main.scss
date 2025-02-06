@@ -1,8 +1,11 @@
 @use '../abstracts/' as *;
 
-.main-container {
-    flex-grow: 1;
-    padding: get-spacing('4');
-    margin-top: 4rem; // Header yüksekliği kadar boşluk bırak
-    overflow-y: auto;
-}
+// .main-container {
+//     @include flex;
+//     background-color: get-color('neutral', 'gray-7');
+//     width: 100%;
+//     margin-left: 16rem; // Sidebar açıkken içerik kayması
+//     transition: margin-left 0.3s ease-in-out;
+   
+//   }
+

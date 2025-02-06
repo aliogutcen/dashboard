@@ -1,20 +1,31 @@
 @use '../abstracts/' as *;
 
-.header-container {
-    @include flex;
-    height: 4rem;
-    background-color: get-color('neutral', 'gray-1');
-    color: get-color('neutral', 'black');
-    align-items: center;
-    padding-left: 1.5rem;
-    padding-right: 1.5rem;
-    position: fixed;
-    width: calc(100% - 16rem); // Sidebar kapladığı alanı düş
-    top: 0;
-    left: 16rem;
+.header {
+  @include flex;
+  
+  background-color: get-color('neutral', 'gray-5');
+  color: get-color('neutral', 'black');
+  padding: get-spacing('4');
+  height: 4rem;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  transition: all 0.2s ease;
 
-    h1 {
-        font-size: x-large;
-        font-weight: bold;
-    }
+  &.shifted {
+    left: 15rem;
+  }
+  .menu-button {
+    @include font('2xl', 'semibold');
+    background: none;
+    border: none;
+    color: get-color('neutral', 'black');
+    cursor: pointer;
+    margin-right: get-spacing('3');
+  }
+
+  h1 {
+    @include font('xl', 'bold');
+  }
 }

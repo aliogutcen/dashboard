@@ -60,34 +60,34 @@ const isAuthPath = (path: string): boolean => {
 
 // Middleware
 export async function middleware(request: NextRequest) {
-  try {
-    const path = request.nextUrl.pathname;
-    const token = request.cookies.get(COOKIE_TOKEN_NAME)?.value;
+  // try {
+  //   const path = request.nextUrl.pathname;
+  //   const token = request.cookies.get(COOKIE_TOKEN_NAME)?.value;
 
-    // Redirect to dashboard if authenticated user tries to access auth pages
-    if (isAuthPath(path) && token) {
-      return NextResponse.redirect(createUrl(Routes.DASHBOARD, request.url));
-    }
+  //   // Redirect to dashboard if authenticated user tries to access auth pages
+  //   if (isAuthPath(path) && token) {
+  //     return NextResponse.redirect(createUrl(Routes.DASHBOARD, request.url));
+  //   }
 
-    // Require authentication for non-auth pages
-    if (!isAuthPath(path) && !token) {
-      return redirectToLogin(request);
-    }
+  //   // Require authentication for non-auth pages
+  //   if (!isAuthPath(path) && !token) {
+  //     return redirectToLogin(request);
+  //   }
 
-    // Validate token and check admin permissions for protected routes
-    if (!isAuthPath(path)) {
-      const userData = await validateToken(token!);
+  //   // Validate token and check admin permissions for protected routes
+  //   if (!isAuthPath(path)) {
+  //     const userData = await validateToken(token!);
       
-      if (!userData || userData.role !== UserRole.ADMIN) {
-        return redirectToLogin(request);
-      }
-    }
+  //     if (!userData || userData.role !== UserRole.ADMIN) {
+  //       return redirectToLogin(request);
+  //     }
+  //   }
 
-    return NextResponse.next();
-  } catch (error) {
-    console.error('Token doğrulama hatası:', error);
-    return redirectToLogin(request);
-  }
+  //   return NextResponse.next();
+  // } catch (error) {
+  //   console.error('Token doğrulama hatası:', error);
+  //   return redirectToLogin(request);
+  // }
 }
 
 // Route configuration
