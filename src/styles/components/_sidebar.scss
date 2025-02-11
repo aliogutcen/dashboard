@@ -1,70 +1,77 @@
 @use '../abstracts/' as *;
 
-.sidebar-container {
-    @include flex;
-    min-height: 100vh;
-    background-color: get-color('neutral', 'gray-1');
-    width: 16rem;
-    color: get-color('neutral', 'black');
-    padding:get-spacing('3');
-    height: 100vh;
-    gap: 2vh;
+.sidebar {
+  width: 15rem;
+  height: 100vh;
+  background-color: get-color('neutral', 'gray-5');
+  color: get-color('neutral', 'white');
+  transition: all 0.2s ease;
+  position: fixed;
+  top: 0;
+  left: 0;
 
-    .sidebar-header {
-        @include font('2xl', 'thin');
-        padding-left: get-spacing('2');
+  &.open {
+    left: 0;
+  }
 
-        p {
-            margin-left: get-spacing('2');
-        }
+  &.closed {
+    left: -250px;
+  }
+
+  nav {
+    display: flex;
+    justify-content: center;
+    margin-top: 5rem;
+  }
+
+  nav ul {
+    display: flex;
+    flex-direction: column;
+    list-style: none;
+    font-size: large;
+    justify-content: space-between;
+
+    .span-div {
+      display: flex;
     }
 
-    .sidebar-nav {
-        @include flex;
+    .icon-span {
+      display: flex;
+      padding-right: 0.2rem;
+    }
+
+    .item-span {
+      display: flex;
+      padding-left: 0.2rem;
+    }
+
+    li {
+      margin-bottom: 0.2rem;
+      cursor: pointer;
+
+      gap: 0.2rem;
+
+      &:before {
+        display: flex;
         flex-direction: column;
-        gap: get-spacing('3');
+        justify-content: center;
+      }
+      &:hover {
+        color: get-color('neutral', 'gray-8'); 
+       
+      }
 
-        a {
-            @include font('sm', 'light');
-            color: get-color('neutral', 'black');
-            cursor: pointer;
+      a {
+        color: get-color('neutral', 'white');
+        text-decoration: none;
+        display: flex; 
+        &:hover {
+          color: get-color('neutral', 'gray-8');
+       
         }
-
-        button {
-            @include flex;
-            background: none;
-            border: none;
-            padding: get-spacing('2');
-            font-size: 16px;
-            width: 100%;
-            color: get-color('neutral', 'black');
-            cursor: pointer;
-            &:hover {
-                text-decoration: none;
-                background-color: get-color('neutral', 'gray-3');;
-            }
-            i {
-                margin-right: get-spacing('4');
-            }
-        }
-
-        .sub-list {
-            padding-left: 20px;
-            display: flex;
-            flex-direction: column;
-
-            .sub-list-item {
-                padding-left: get-spacing('5');
-                padding-top: get-spacing('2');
-                font-size: 1rem;
-                text-decoration: none;
-                color: get-color('neutral', 'black');
-
-                &:hover {
-                    text-decoration: none;
-                    background-color: get-color('neutral', 'gray-3');;
-                }
-            }
-        }
+        font-size: small;
+        padding-left: 2rem;
+      }
     }
+  }
 }

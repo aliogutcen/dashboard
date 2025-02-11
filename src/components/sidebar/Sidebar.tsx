@@ -1,69 +1,77 @@
-'use client'
+'use client';
 
+import { AudioLines, LayoutDashboard, Settings } from 'lucide-react';
+import Link from 'next/link';
+import React, { FC, useState } from 'react';
 
-import React, { useState } from 'react'
-
-const sidebarItem = [
-    {
-        item: 'Dashboard',
-        icon: 'dashboard',
-        subItems: [
-            { item: 'Overview', link: '/dashboard/overview' },
-            { item: 'Analytics', link: '/dashboard/analytics' },
-        ],
-    },
-    {
-        item: 'Settings',
-        icon: 'settings',
-        subItems: [
-            { item: 'Profile', link: '/settings/profile' },
-            { item: 'Security', link: '/settings/security' },
-        ],
-    },
-];
-
-
-const Sidebar = () => {
-
-    const [visibleSubList, setVisibleSubList] = useState<string | null>(null);
-
-    const handleToggleSubList = (itemName: string) => {
-        setVisibleSubList(prevState => (prevState === itemName ? null : itemName));
-    }
-    
- 
-  return (
-    <div className='sidebar-container'>
-    <aside>
-        <div className='sidebar-header'>
-            <p>Acme Inc</p>
-        </div>
-        <nav className='sidebar-nav'>
-            {sidebarItem.map((item, index) => (
-                <div key={index}>
-                    <button
-                        onClick={() => item.subItems && handleToggleSubList(item.item)}
-                        className="sidebar-item"
-                        aria-expanded={visibleSubList === item.item ? "true" : "false"}
-                    >
-                        {item.icon && <i className={`icon-${item.icon}`}></i>}
-                        {item.item}
-                    </button>
-                    {item.subItems && visibleSubList === item.item && (
-                        <div className="sub-list">
-                            {item.subItems.map((subItem, subIndex) => (
-                                <a key={subIndex} href={subItem.link} className="sub-list-item">
-                                    {subItem.item}
-                                </a>
-                            ))}
-                        </div>
-                    )}
-                </div>
-            ))}
-        </nav>
-    </aside>
-</div>
-  )
+interface SidebarProps {
+  isOpen: boolean;
 }
 
-export  {Sidebar}
+const sidebarItem = [
+  {
+    id: 1,
+    item: 'Dashboard',
+    icon: <LayoutDashboard />,
+    subItems: [
+      { id: 4, item: 'Overview', link: '/overview' },
+      { id: 5, item: 'Analytics', link: '/' },
+    ],
+  },
+  {
+    id: 2,
+    item: 'PlayGround',
+    icon: <AudioLines />,
+    subItems: [
+      { id: 6, item: 'number', link: '/number' },
+      { id: 7, item: 'email', link: '/email' },
+    ],
+  },
+  {
+    id: 3,
+    item: 'Settings',
+    icon: <Settings />,
+    subItems: [
+      { id: 8, item: 'Profile', link: '/settings/profile' },
+      { id: 9, item: 'Security', link: '/settings/security' },
+    ],
+  },
+];
+
+const Sidebar: FC<SidebarProps> = ({ isOpen }) => {
+  const [openSection, setOpenSection] = useState<number | null>(null);
+
+  const handleToggleSubItems = (id: number) => {
+    // Toggle the sub-items of the clicked section
+    setOpenSection((prev) => (prev === id ? null : id));
+  };
+  return (
+    <div className={`sidebar ${isOpen ? 'open' : 'closed'}`}>
+      <aside>
+        <nav>
+          <ul>
+            {sidebarItem.map((section) => (
+              <li key={section.id} onClick={() => handleToggleSubItems(section.id)}>
+                <div className="span-div">
+                  <span className="icon-span">{section.icon}</span>
+                  <span className="item-span">{section.item}</span>
+                </div>
+                {openSection === section.id && (
+                  <ul>
+                    {section.subItems.map((subItem) => (
+                      <li key={subItem.id}>
+                        <Link href={subItem.link}>{subItem.item}</Link>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </li>
+            ))}
+          </ul>
+        </nav>
+      </aside>
+    </div>
+  );
+};
+
+export { Sidebar };
