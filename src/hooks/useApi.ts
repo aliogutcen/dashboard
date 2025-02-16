@@ -11,6 +11,7 @@ import { AxiosResponse } from 'axios';
 
 // API Response Type
 export interface ApiResponse<T = unknown> {
+  token(arg0: string, token: any): unknown;
   data: T;
   status: number;
   message?: string;

@@ -3,25 +3,24 @@
 import { useState, FormEvent } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useAuth } from '@/hooks/useAuth';
+import { Input } from '@/components/ui/input/input';
+import { Button } from '@/components/ui/button/button';
+
 
 export default function LoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [rememberMe, setRememberMe] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
+  const { login, isLoading, error } = useAuth();
+
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    setIsLoading(true);
-
     try {
-      // API çağrısı burada yapılacak
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      console.log('Giriş yapılıyor:', { email, password, rememberMe });
+      await login({ email, password, rememberMe });
     } catch (error) {
-      console.error('Giriş hatası:', error);
-    } finally {
-      setIsLoading(false);
+      console.error('Login error:', error);
     }
   };
 
@@ -32,9 +31,15 @@ export default function LoginPage() {
           <h1 className="form-title">Giriş Yap</h1>
           <p className="form-subtitle">Hesabınıza erişin</p>
 
+          {error && (
+            <div className="error-message">
+              {error.message}
+            </div>
+          )}
+
           <div className="form-group">
             <label htmlFor="email">E-posta</label>
-            <input
+            <Input
               type="email"
               id="email"
               className="form-control"
@@ -47,7 +52,7 @@ export default function LoginPage() {
 
           <div className="form-group">
             <label htmlFor="password">Şifre</label>
-            <input
+            <Input
               type="password"
               id="password"
               className="form-control"
@@ -73,20 +78,20 @@ export default function LoginPage() {
             </Link>
           </div>
 
-          <button
+          <Button
             type="submit"
             className="btn-login"
             disabled={isLoading}
           >
             {isLoading ? 'Giriş yapılıyor...' : 'Giriş Yap'}
-          </button>
+          </Button>
         </form>
       </section>
 
       <section className="auth-image-section">
         <div className="image-wrapper">
           <Image
-            src="https://unsplash.com/photos/a-computer-mouse-sitting-on-top-of-a-mouse-pad-edTO_gLjGzU?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80"
+            src="/images/login-bg.jpg"
             alt="Login"
             fill
             priority

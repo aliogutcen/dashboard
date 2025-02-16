@@ -1,9 +1,10 @@
 @use '../abstracts/' as *;
 
-
 .dashboard-layout {
     @include flex;
     height: 100vh;
+    position: relative;
+    background-color: #f9fafb;
    
     &.sidebar-open {
       .dashboard-content {
@@ -14,17 +15,15 @@
   
     &.sidebar-closed {
       .dashboard-content {
-        margin-left: 0;
-        width: 100%;
+        margin-left: 4rem;
+        width: calc(100% - 4rem);
       }
     }
   
     .dashboard-content {
       flex-grow: 1;
-      padding-top: 5rem;
-      padding-left: 3rem;
-      background-color: get-color('neutral', 'white');
+      padding: 5rem 1.5rem 1.5rem;
       transition: all 0.3s ease;
+      min-height: 100vh;
     }
-  }
-  
+}

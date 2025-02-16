@@ -1,24 +1,30 @@
 'use client';
-import { useState } from 'react';
-import Header from '../header/Header';
-import { Sidebar } from '../sidebar/Sidebar';
 
-const FunctionalSidebar = ({ children }: { children: React.ReactNode }) => {
+import { FC, ReactNode, useState } from 'react';
+import { Sidebar } from '../sidebar/Sidebar';
+import { Header } from '../header/Header';
+
+interface FunctionalSidebarProps {
+  children: ReactNode;
+}
+
+const FunctionalSidebar: FC<FunctionalSidebarProps> = ({ children }) => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
 
-  return (
-    <>
-      <div className={`dashboard-layout ${isSidebarOpen ? 'sidebar-open' : 'sidebar-closed'}`}>
+  const toggleSidebar = () => {
+    setIsSidebarOpen(!isSidebarOpen);
+  };
 
-        <Header
-          isSidebarOpen={isSidebarOpen}
-          toggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)}
-          />
-        
-        <Sidebar isOpen={isSidebarOpen}   />
-        <main className="dashboard-content">{children}</main>
+  return (
+    <div className="layout-container">
+      <Sidebar isOpen={isSidebarOpen} />
+      <div className={`content-wrapper ${!isSidebarOpen ? 'sidebar-closed' : ''} ${isSidebarOpen ? 'sidebar-open' : ''}`}>
+        <Header isSidebarOpen={isSidebarOpen} toggleSidebar={toggleSidebar} />
+        <main className="main-content">
+          {children}
+        </main>
       </div>
-    </>
+    </div>
   );
 };
 

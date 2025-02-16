@@ -1,76 +1,187 @@
 'use client';
 
-import { AudioLines, LayoutDashboard, Settings } from 'lucide-react';
+import { LayoutDashboard, ChevronRight, ChevronDown, Settings, Users, FileText, Box } from 'lucide-react';
 import Link from 'next/link';
 import React, { FC, useState } from 'react';
+import { usePathname } from 'next/navigation';
+
+interface Company {
+  id: number;
+  name: string;
+  logo: string;
+}
+
+interface SubItem {
+  id: number;
+  item: string;
+  link: string;
+}
+
+interface SidebarItem {
+  id: number;
+  item: string;
+  icon: React.ReactNode;
+  link?: string;
+  subItems?: SubItem[];
+}
 
 interface SidebarProps {
   isOpen: boolean;
 }
 
-const sidebarItem = [
+const companies: Company[] = [
+  { id: 1, name: 'Acme Corp.', logo: '🏢' },
+  { id: 2, name: 'Startup Inc.', logo: '🚀' },
+  { id: 3, name: 'Tech Labs', logo: '⚡' },
+];
+
+const sidebarItems: SidebarItem[] = [
   {
     id: 1,
     item: 'Dashboard',
-    icon: <LayoutDashboard />,
-    subItems: [
-      { id: 4, item: 'Overview', link: '/overview' },
-      { id: 5, item: 'Analytics', link: '/' },
-    ],
+    icon: <LayoutDashboard size={20} />,
+    link: '/dashboard'
   },
   {
     id: 2,
-    item: 'PlayGround',
-    icon: <AudioLines />,
+    item: 'Kullanıcılar',
+    icon: <Users size={20} />,
     subItems: [
-      { id: 6, item: 'number', link: '/number' },
-      { id: 7, item: 'email', link: '/email' },
+      { id: 1, item: 'Tüm Kullanıcılar', link: '/users' },
+      { id: 2, item: 'Roller', link: '/roles' },
+      { id: 3, item: 'İzinler', link: '/permissions' },
     ],
   },
   {
     id: 3,
-    item: 'Settings',
-    icon: <Settings />,
+    item: 'Dökümanlar',
+    icon: <FileText size={20} />,
+    link: '/documents'
+  },
+  {
+    id: 4,
+    item: 'Ürünler',
+    icon: <Box size={20} />,
     subItems: [
-      { id: 8, item: 'Profile', link: '/settings/profile' },
-      { id: 9, item: 'Security', link: '/settings/security' },
+      { id: 4, item: 'Tüm Ürünler', link: '/products' },
+      { id: 5, item: 'Kategoriler', link: '/categories' },
+      { id: 6, item: 'Stok', link: '/inventory' },
     ],
+  },
+  {
+    id: 5,
+    item: 'Ayarlar',
+    icon: <Settings size={20} />,
+    link: '/settings'
   },
 ];
 
 const Sidebar: FC<SidebarProps> = ({ isOpen }) => {
   const [openSection, setOpenSection] = useState<number | null>(null);
+  const [isCompanyDropdownOpen, setIsCompanyDropdownOpen] = useState(false);
+  const [selectedCompany, setSelectedCompany] = useState<Company>(companies[0]);
+  const pathname = usePathname();
 
-  const handleToggleSubItems = (id: number) => {
-    // Toggle the sub-items of the clicked section
+  const handleToggleSubItems = (id: number): void => {
     setOpenSection((prev) => (prev === id ? null : id));
   };
+
+  const handleCompanySelect = (company: Company): void => {
+    setSelectedCompany(company);
+    setIsCompanyDropdownOpen(false);
+  };
+
+  const isLinkActive = (link: string): boolean => {
+    return pathname === link;
+  };
+
   return (
-    <div className={`sidebar ${isOpen ? 'open' : 'closed'}`}>
-      <aside>
-        <nav>
-          <ul>
-            {sidebarItem.map((section) => (
-              <li key={section.id} onClick={() => handleToggleSubItems(section.id)}>
-                <div className="span-div">
-                  <span className="icon-span">{section.icon}</span>
-                  <span className="item-span">{section.item}</span>
-                </div>
-                {openSection === section.id && (
-                  <ul>
-                    {section.subItems.map((subItem) => (
-                      <li key={subItem.id}>
-                        <Link href={subItem.link}>{subItem.item}</Link>
-                      </li>
-                    ))}
-                  </ul>
-                )}
-              </li>
+    <aside className={`sidebar ${!isOpen ? 'closed' : 'open'}`}>
+      <div className="company-selector">
+        <button 
+          className="company-button"
+          onClick={() => setIsCompanyDropdownOpen(!isCompanyDropdownOpen)}
+          aria-expanded={isCompanyDropdownOpen}
+          aria-label="Şirket seçici"
+        >
+          <div className="company-info">
+            <span className="company-icon">
+              {selectedCompany.logo}
+            </span>
+            {isOpen && (
+              <span className="company-name">{selectedCompany.name}</span>
+            )}
+          </div>
+          {isOpen && (
+            <ChevronDown 
+              size={16}
+              className={`dropdown-arrow ${isCompanyDropdownOpen ? 'rotate' : ''}`}
+              aria-hidden="true"
+            />
+          )}
+        </button>
+        {isCompanyDropdownOpen && isOpen && (
+          <div className="company-dropdown">
+            {companies.map((company) => (
+              <button
+                key={company.id}
+                className={`company-option ${selectedCompany.id === company.id ? 'active' : ''}`}
+                onClick={() => handleCompanySelect(company)}
+              >
+                <span className="company-logo">{company.logo}</span>
+                <span className="company-name">{company.name}</span>
+              </button>
             ))}
-          </ul>
-        </nav>
-      </aside>
-    </div>
+          </div>
+        )}
+      </div>
+      <nav className="sidebar-nav">
+        {sidebarItems.map((item) => (
+          <div key={item.id} className="nav-item">
+            {item.link ? (
+              <Link 
+                href={item.link}
+                className={`nav-link ${isLinkActive(item.link) ? 'active' : ''}`}
+              >
+                <span className="icon">{item.icon}</span>
+                {isOpen && <span>{item.item}</span>}
+              </Link>
+            ) : (
+              <>
+                <button
+                  className={`nav-link ${openSection === item.id ? 'active' : ''}`}
+                  onClick={() => handleToggleSubItems(item.id)}
+                >
+                  <span className="icon">{item.icon}</span>
+                  {isOpen && (
+                    <>
+                      <span>{item.item}</span>
+                      <ChevronRight
+                        size={16}
+                        className={`arrow ${openSection === item.id ? 'rotate' : ''}`}
+                      />
+                    </>
+                  )}
+                </button>
+                {isOpen && openSection === item.id && item.subItems && (
+                  <div className="sub-items">
+                    {item.subItems.map((subItem) => (
+                      <Link
+                        key={subItem.id}
+                        href={subItem.link}
+                        className={`sub-link ${isLinkActive(subItem.link) ? 'active' : ''}`}
+                      >
+                        {subItem.item}
+                      </Link>
+                    ))}
+                  </div>
+                )}
+              </>
+            )}
+          </div>
+        ))}
+      </nav>
+    </aside>
   );
 };
 
